@@ -1,0 +1,59 @@
+{
+"id": 1,
+"jsonrpc": "2.0",
+"total": 100,
+"result": [
+{
+"id": 1,
+"avatar": "images/user_1.png",
+"age": 9,
+"admin": false,
+"name": "Леонид Приходько",
+"company": "InfoAirway",
+"phone": "+70954315588",
+"email": "leonid@infoairway.com",
+"registerDate": "Sun, 22 Jan 2012 07:50:19 GMT",
+"friends": [
+{
+"id": 1,
+"name": "Захар Новиков",
+"phone": "+70957186039",
+"buddies": [
+{
+"field1_1": 1,
+"field1_2": -318,
+"customers": [
+{
+"phone": 1,
+"field2_2": "Thu, 25 Jan 1979 04:17:27 GMT",
+"field2_3": [
+{
+"field3_1": [
+{
+"field4_1": 3,
+"field4_2": [
+{
+"field5_1": "martin@thermotomic.com",
+"field5_2": [
+{
+"field6_1": 12
+}
+],
+"phone": "lol"
+}
+]
+}
+]
+}
+]
+}
+],
+"phone": "test"
+}
+]
+}
+],
+"field": "field value"
+}
+]
+}

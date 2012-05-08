@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutEncapsulate"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/resLV6_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Results - Random 6 level JSON data" />
+
+    <Button
+        android:id="@+id/resLV10_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Results - Random 10 level JSON data" />
+
+    <Button
+        android:id="@+id/resTW_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Results - Twitter JSON data" />
+
+    <Button
+        android:id="@+id/resFB_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Results - Facebook status JSON data" />
+
+    <ProgressBar
+        android:id="@+id/test_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

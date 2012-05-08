@@ -1,0 +1,137 @@
+6 level files have following hierarchy:
+
+{
+  "id": "$incr",
+  "avatar": "images/user_$incr.png",
+  "age": "$randInt(-18,60)",
+  "admin": "$bool",
+  "name": "$firstName $lastName",
+  "company": "$company",
+  "phone": "$phone",
+  "email": "$email",
+  "registerDate": "$date",
+  "friends": [
+    "$repeat:1",
+    {
+      "id": "$incr",
+      "name": "$firstName $lastName",
+      "phone": "$phone",
+      "buddies": [
+        "$repeat:1",
+        {
+          "field1_1": "$incr",
+          "field1_2": "$randInt(-500,500)",
+          "customers": [
+            "$repeat:1",
+            {
+              "field2_1": "$incr",
+              "field2_2": "$date",
+              "field2_3": [
+                {
+                  "field3_1": [
+                    "$repeat:1",
+                    {
+                      "field4_1": "$randInt(-10,10)",
+                      "field4_2": [
+                        "$repeat:1",
+                        {
+                          "field5_1": "$email",
+                          "field5_2": [
+                            {
+                              "field6_1": "$randInt(-200,200)"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "field": "field value"
+}
+
+Difference between large and small files is repetition among the levels (large one doesn't always have $repeat:1). 10 levels one has format:
+
+{
+  "id": "$incr",
+  "avatar": "images/user_$incr.png",
+  "age": "$randInt(-18,60)",
+  "admin": "$bool",
+  "name": "$firstName $lastName",
+  "company": "$company",
+  "phone": "$phone",
+  "email": "$email",
+  "registerDate": "$date",
+  "friends": [
+    "$repeat:1",
+    {
+      "id": "$incr",
+      "name": "$firstName $lastName",
+      "phone": "$phone",
+      "buddies": [
+        "$repeat:1",
+        {
+          "field1_1": "$incr",
+          "field1_2": "$randInt(-500,500)",
+          "customers": [
+            "$repeat:1",
+            {
+              "field2_1": "$incr",
+              "field2_2": "$date",
+              "field2_3": [
+                {
+                  "field3_1": [
+                    "$repeat:1",
+                    {
+                      "field4_1": "$randInt(-10,10)",
+                      "field4_2": [
+                        "$repeat:1",
+                        {
+                          "field5_1": "$email",
+                          "field5_2": [
+                            {
+                              "field6_1": "$randInt(-200,200)",
+                              "field6_2": [
+                                {
+                                  "field7_1": "$company",
+                                  "field7_2": "$firstName $lastName",
+                                  "field7_3": "$email",
+                                  "field7_4": [
+                                    {
+                                      "field8_1": [
+                                        {
+                                          "field9_1": "$email",
+                                          "field9_2": [
+                                            {
+                                              "field10_1": "$date",
+                                              "has": "$bool"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "field": "field value"
+}
