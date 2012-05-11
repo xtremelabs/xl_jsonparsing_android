@@ -21,13 +21,12 @@ public final class R {
         public static final int semi_black=0x7f040000;
     }
     public static final class id {
-        public static final int editText1=0x7f070006;
+        public static final int editText1=0x7f070005;
         public static final int linearLayoutEncapsulate=0x7f070000;
-        public static final int resFB_button=0x7f070004;
         public static final int resLV10_button=0x7f070002;
         public static final int resLV6_button=0x7f070001;
         public static final int resTW_button=0x7f070003;
-        public static final int test_progress=0x7f070005;
+        public static final int test_progress=0x7f070004;
     }
     public static final class layout {
         public static final int main=0x7f020000;

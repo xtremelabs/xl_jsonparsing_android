@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -29,8 +30,8 @@ import com.google.gson.JsonObject;
 
 public class JSONPerfEval extends Activity {
 
-	public static final int NUM_RUNS = 1;
-	private static final String QUERY_KEY = "geo";
+	public static final int NUM_RUNS = 10;
+	private static String QUERY_KEY = "field4_2";
 
 	private enum JSONParsers {
 		JSON_PARSER_JSON_ORG, JSON_PARSER_GSON, JSON_PARSER_GSON_READER, JSON_PARSER_JSON_SIMPLE, JSON_PARSER_JACKSON
@@ -57,21 +58,21 @@ public class JSONPerfEval extends Activity {
 		final Button button6 = (Button) findViewById(R.id.resLV6_button);
 		final Button button10 = (Button) findViewById(R.id.resLV10_button);
 		final Button buttonTwitter = (Button) findViewById(R.id.resTW_button);
-		final Button buttonFaceBook = (Button) findViewById(R.id.resFB_button);
+		// final Button buttonFaceBook = (Button) findViewById(R.id.resFB_button);
 
 		((EditText) findViewById(R.id.editText1)).setKeyListener(null);
 
 		SetButtonHandlers(button6, JSONInputs.JSON_INPUT_LEVEL6);
 		SetButtonHandlers(button10, JSONInputs.JSON_INPUT_LEVEL10);
 		SetButtonHandlers(buttonTwitter, JSONInputs.JSON_INPUT_TWITTER);
-		SetButtonHandlers(buttonFaceBook, JSONInputs.JSON_INPUT_FB);
+		// SetButtonHandlers(buttonFaceBook, JSONInputs.JSON_INPUT_FB);
 
 		// initialize and set data files
 		jsonInputDataFiles = new ArrayList<String>(JSONInputs.values().length);
 		jsonInputDataFiles.add(JSONInputs.JSON_INPUT_LEVEL6.ordinal(), "random6levels_small.txt");
 		jsonInputDataFiles.add(JSONInputs.JSON_INPUT_LEVEL10.ordinal(), "random10levels_small.txt");
 		jsonInputDataFiles.add(JSONInputs.JSON_INPUT_TWITTER.ordinal(), "twitter_100.txt");
-		// jsonInputDataFiles.add(JSONInputs.JSON_INPUT_FB.ordinal(), "fbwatermelon.txt");
+		jsonInputDataFiles.add(JSONInputs.JSON_INPUT_FB.ordinal(), "fbwatermelon.txt");
 
 		jsonInputData = new ArrayList<String>(JSONInputs.values().length);
 		for (JSONInputs input : JSONInputs.values()) {
@@ -79,20 +80,55 @@ public class JSONPerfEval extends Activity {
 		}
 	}
 
-	private void SetButtonHandlers(Button button, final JSONInputs inputType) {
-		button.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				RunJSONParsersAndSetText(inputType);
+	private class backgroundTask extends AsyncTask<Void, Void, Void> {
+
+		EditText text = ((EditText) findViewById(R.id.editText1));
+		JSONInputs input;
+
+		public backgroundTask(JSONInputs inputType) {
+			outputResultText = "";
+			switch (inputType) {
+			case JSON_INPUT_LEVEL6:
+				QUERY_KEY = "field4_2";
+				break;
+			case JSON_INPUT_LEVEL10:
+				QUERY_KEY = "field4_2";
+				break;
+			case JSON_INPUT_TWITTER:
+				QUERY_KEY = "geo";
+				break;
+			case JSON_INPUT_FB:
+				QUERY_KEY = "name";
+				break;
 			}
-		});
+			input = inputType;
+
+		}
+
+		@Override
+		protected void onPreExecute() {
+			text.setText("Running tests...");
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			RunJSONParsers(input);
+			return null;
+		}
+
+		protected void onPostExecute(Void z) {
+			text.setText(outputResultText);
+		}
+
 	}
 
-	private void RunJSONParsersAndSetText(JSONInputs inputType) {
-		// run supported parsers
-		EditText text = ((EditText) findViewById(R.id.editText1));
-		RunJSONParsers(inputType);
-		text.setText(outputResultText);
-		outputResultText = "";
+	private void SetButtonHandlers(Button button, final JSONInputs inputType) {
+
+		button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				new backgroundTask(inputType).execute();
+			}
+		});
 	}
 
 	private void RunJSONParsers(JSONInputs inputType) {
@@ -221,9 +257,9 @@ public class JSONPerfEval extends Activity {
 			totalRunTime /= NUM_RUNS;
 			totalParseTime /= NUM_RUNS;
 
-			Log.w("TEST_LEVEL6", String.format("%s Total RUNTIME - " + totalRunTime, parserName) + " ms.");
-			Log.w("TEST_LEVEL6", String.format("%s Initialization RUNTIME - " + (end_JSONParseQuery - start_time) / (long) 1000000.0, parserName) + " ms.");
-			Log.w("TEST_LEVEL6", String.format("%s Total Parse RUNTIME - " + totalParseTime, parserName) + " ms.");
+			// Log.w("TEST_LEVEL6", String.format("%s Total RUNTIME - " + totalRunTime, parserName) + " ms.");
+			// Log.w("TEST_LEVEL6", String.format("%s Initialization RUNTIME - " + (end_JSONParseQuery - start_time) / (long) 1000000.0, parserName) + " ms.");
+			// Log.w("TEST_LEVEL6", String.format("%s Total Parse RUNTIME - " + totalParseTime, parserName) + " ms.");
 
 			outputResultText += parserName + ":\n";
 			outputResultText += String.format("Avg Runtime: %dms\n", totalRunTime);
@@ -348,11 +384,6 @@ public class JSONPerfEval extends Activity {
 
 					}
 
-					if (keyName.equals("since_id") || (keyName.equals("coordinates") && txtValue.equals("["))) {
-						// Log.w("Jackson", "Hello World");
-
-					}
-
 					if (parser.getCurrentToken() == JsonToken.START_ARRAY) {
 						com.fasterxml.jackson.core.JsonToken innerNextToken = parser.nextToken();
 
@@ -363,14 +394,12 @@ public class JSONPerfEval extends Activity {
 							innerNextToken = parser.nextToken();
 						}
 					} else if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
-						// while (parser.nextToken() != JsonToken.END_OBJECT) {
 						hitCount += LocateKey_JSON_Jackson_Helper(parser, key, level + 1);
-						// }
 					}
 
-				} else {
-					// Log.w("Jackson", parser.getCurrentToken().toString());
-				}
+				} /*
+				 * else { Log.w("Jackson", parser.getCurrentToken().toString()); }
+				 */
 
 				jsonToken = parser.nextToken();
 			}
