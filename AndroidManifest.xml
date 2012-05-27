@@ -27,7 +27,7 @@
     package="com.xtreme">
     <uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-sdk android:targetSdkVersion="11"/>
+    <uses-sdk android:targetSdkVersion="15" android:minSdkVersion="11"/>
     <!-- This package contains an application...  The 'label' is the name
          to display to the user for the overall application, and provides
          a default label for all following components.  The syntax here is a
@@ -58,6 +58,6 @@
         </activity>
 
     </application>
-
+	
 </manifest>
 

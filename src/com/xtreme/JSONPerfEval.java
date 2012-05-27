@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -23,10 +21,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import org.json.JSONObject;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 
 public class JSONPerfEval extends Activity {
 
@@ -273,7 +275,6 @@ public class JSONPerfEval extends Activity {
 
 	private void load_data(JSONInputs inputType) {
 		try {
-			int line_number = 1;
 			String line = null;
 			InputStream is = this.getAssets().open(jsonInputDataFiles.get(inputType.ordinal()));
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -284,7 +285,6 @@ public class JSONPerfEval extends Activity {
 				}
 
 				jsonInputData.set(inputType.ordinal(), originalData + line);
-				line_number++;
 			}
 			br.close();
 		} catch (IOException e) {
@@ -292,7 +292,7 @@ public class JSONPerfEval extends Activity {
 		}
 	}
 
-	private int LocateKey_GSON_Reader(com.google.gson.stream.JsonReader reader, String key) {
+	private int LocateKey_GSON_Reader(JsonReader reader, String key) {
 		int hitCount = 0;
 		try {
 			if (reader.peek() == com.google.gson.stream.JsonToken.BEGIN_ARRAY) {
@@ -347,7 +347,7 @@ public class JSONPerfEval extends Activity {
 		return hitCount;
 	}
 
-	private int LocateKey_JSON_Jackson(com.fasterxml.jackson.core.JsonParser parser, String key) {
+	private int LocateKey_JSON_Jackson(JsonParser parser, String key) {
 		int hitCount = 0;
 		try {
 			parser.nextToken();
@@ -368,7 +368,7 @@ public class JSONPerfEval extends Activity {
 		return hitCount;
 	}
 
-	private int LocateKey_JSON_Jackson_Helper(com.fasterxml.jackson.core.JsonParser parser, String key, int level) {
+	private int LocateKey_JSON_Jackson_Helper(JsonParser parser, String key, int level) {
 		int hitCount = 0;
 		try {
 			com.fasterxml.jackson.core.JsonToken jsonToken = parser.nextToken();
@@ -376,7 +376,7 @@ public class JSONPerfEval extends Activity {
 				if (parser.getCurrentToken() == JsonToken.FIELD_NAME) {
 					String keyName = parser.getCurrentName();
 					parser.nextToken();
-					String txtValue = parser.getText();
+					//String txtValue = parser.getText();
 					// Log.w("Jackson", String.format("Key: %s  Value:  %s", keyName, txtValue));
 
 					if (keyName.equals(key)) {
@@ -437,8 +437,8 @@ public class JSONPerfEval extends Activity {
 		}
 		return hitCount;
 	}
-
-	private int LocateKey_GSON(com.google.gson.JsonArray sourceArray, String key) {
+	
+	private int LocateKey_GSON(JsonArray sourceArray, String key) {
 		int hitCount = 0;
 		for (int i = 0; i < sourceArray.size(); i++) {
 			com.google.gson.JsonElement element = sourceArray.get(i);
